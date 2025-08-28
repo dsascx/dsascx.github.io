@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 加密解密工具</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        // 检查用户的主题偏好
+        const isDarkMode = localStorage.getItem('darkMode') === 'true' || 
+                          (localStorage.getItem('darkMode') === null && 
+                           window.matchMedia('(prefers-color-scheme: dark)').matches);
+                           
+        // 设置初始主题类
+        document.documentElement.classList.toggle('dark', isDarkMode);
+        
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#475569',
+                        neutral: '#f1f5f9',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                },
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .shadow-soft {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            }
+            .transition-all-ease {
+                transition: all 0.3s ease;
+            }
+            .dark .shadow-soft {
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-neutral dark:bg-gray-900 min-h-screen flex flex-col transition-colors duration-300">
+    <!-- 导航栏 -->
+    <header class="bg-white dark:bg-gray-800 shadow-sm dark:shadow-gray-900/30 sticky top-0 z-10 transition-colors duration-300">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-2 text-primary font-bold text-xl">
+                <i class="fa fa-code" aria-hidden="true"></i>
+                <span>Base64 Tools</span>
+            </a>
+            <div class="flex items-center gap-6">
+                <nav>
+                    <ul class="flex space-x-6">
+                        <li><a href="#" class="text-secondary hover:text-primary transition-all-ease">首页</a></li>
+                        <li><a href="#features" class="text-secondary hover:text-primary transition-all-ease">功能</a></li>
+                        <li><a href="#about" class="text-secondary hover:text-primary transition-all-ease">关于</a></li>
+                    </ul>
+                </nav>
+                <button id="themeToggle" class="w-10 h-10 rounded-full flex items-center justify-center bg-gray-200 dark:bg-gray-700 text-secondary dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 transition-all-ease">
+                    <i id="themeIcon" class="fa fa-moon-o dark:hidden" aria-hidden="true"></i>
+                    <i class="fa fa-sun-o hidden dark:block" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <main class="flex-grow container mx-auto px-4 py-12">
+        <!-- 英雄区域 -->
+        <section class="mb-16 text-center">
+            <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-gray-800 dark:text-white mb-4">Base64 加密解密工具</h1>
+            <p class="text-secondary dark:text-gray-300 text-lg max-w-2xl mx-auto">简单、高效、安全的在线 Base64 编码解码工具，支持文本和文件处理</p>
+        </section>
+
+        <!-- 工具区域 -->
+        <section class="max-w-4xl mx-auto bg-white dark:bg-gray-800 rounded-xl shadow-soft p-6 mb-16 transition-colors duration-300">
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- 加密区域 -->
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white">文本加密</h2>
+                        <button id="encryptBtn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all-ease">
+                            <i class="fa fa-lock" aria-hidden="true"></i>
+                            <span>加密</span>
+                        </button>
+                    </div>
+                    <textarea id="encryptInput" class="w-full h-48 p-4 border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all-ease resize-none" placeholder="请输入要加密的文本..."></textarea>
+                </div>
+
+                <!-- 解密区域 -->
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h2 class="text-xl font-semibold text-gray-800 dark:text-white">文本解密</h2>
+                        <button id="decryptBtn" class="bg-primary hover:bg-primary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all-ease">
+                            <i class="fa fa-unlock" aria-hidden="true"></i>
+                            <span>解密</span>
+                        </button>
+                    </div>
+                    <textarea id="decryptInput" class="w-full h-48 p-4 border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all-ease resize-none" placeholder="请输入要解密的Base64文本..."></textarea>
+                </div>
+            </div>
+
+            <!-- 输出区域 -->
+            <div class="mt-8 space-y-4">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-xl font-semibold text-gray-800 dark:text-white">结果</h2>
+                    <button id="copyBtn" class="bg-secondary hover:bg-secondary/90 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-all-ease">
+                        <i class="fa fa-copy" aria-hidden="true"></i>
+                        <span>复制结果</span>
+                    </button>
+                </div>
+                <div class="relative">
+                    <textarea id="resultOutput" class="w-full h-32 p-4 border border-gray-300 dark:border-gray-700 dark:bg-gray-700 dark:text-white rounded-lg bg-gray-50 resize-none" placeholder="结果将显示在这里..." readonly></textarea>
+                    <div id="copyNotification" class="absolute top-3 right-3 bg-green-500 text-white text-sm px-2 py-1 rounded opacity-0 transition-opacity duration-300">
+                        <i class="fa fa-check" aria-hidden="true"></i> 已复制
+                    </div>
+                </div>
+            </div>
+
+            <!-- 文件处理区域 -->
+            <div class="mt-8 pt-8 border-t border-gray-200 dark:border-gray-700">
+                <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-4">文件处理</h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-primary transition-all-ease cursor-pointer" id="fileEncryptArea">
+                        <input type="file" id="fileEncryptInput" class="hidden" />
+                        <i class="fa fa-file-text-o text-4xl text-gray-400 dark:text-gray-500 mb-3" aria-hidden="true"></i>
+                        <p class="text-gray-600 dark:text-gray-400">点击上传文件进行加密</p>
+                    </div>
+                    <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-primary transition-all-ease cursor-pointer" id="fileDecryptArea">
+                        <input type="file" id="fileDecryptInput" class="hidden" />
+                        <i class="fa fa-file-code-o text-4xl text-gray-400 dark:text-gray-500 mb-3" aria-hidden="true"></i>
+                        <p class="text-gray-600 dark:text-gray-400">点击上传Base64文件进行解密</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 功能介绍 -->
+        <section id="features" class="mb-16">
+            <h2 class="text-3xl font-bold text-center text-gray-800 dark:text-white mb-12">核心功能</h2>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-soft hover:shadow-lg transition-all-ease">
+                    <div class="w-12 h-12 bg-primary/10 text-primary rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-exchange text-xl" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">双向转换</h3>
+                    <p class="text-secondary dark:text-gray-300">轻松在普通文本和Base64编码之间进行加密和解密转换，支持所有常见字符编码。</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-soft hover:shadow-lg transition-all-ease">
+                    <div class="w-12 h-12 bg-primary/10 text-primary rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-file-o text-xl" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">文件处理</h3>
+                    <p class="text-secondary dark:text-gray-300">支持直接上传文件进行Base64编码或解码，适用于各种类型的文件格式。</p>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-soft hover:shadow-lg transition-all-ease">
+                    <div class="w-12 h-12 bg-primary/10 text-primary rounded-lg flex items-center justify-center mb-4">
+                        <i class="fa fa-shield text-xl" aria-hidden="true"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">本地处理</h3>
+                    <p class="text-secondary dark:text-gray-300">所有数据处理均在您的浏览器中完成，不会上传到服务器，确保数据安全和隐私。</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 关于区域 -->
+        <section id="about" class="bg-white dark:bg-gray-800 rounded-xl shadow-soft p-8 max-w-4xl mx-auto transition-colors duration-300">
+            <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-4">关于 Base64 编码</h2>
+            <p class="text-secondary dark:text-gray-300 mb-4">Base64 是一种基于64个可打印字符来表示二进制数据的编码方式。它常用于需要通过文本协议传输二进制数据的场景，如电子邮件、URL参数、数据URI等。</p>
+            <p class="text-secondary dark:text-gray-300 mb-4">Base64 编码将3字节的二进制数据编码为4字节的文本数据，增加了约33%的数据量，但保证了数据的可靠传输。编码后的数据仅包含A-Z、a-z、0-9、+、/和=等字符。</p>
+            <p class="text-secondary dark:text-gray-300">此工具提供了简单直观的界面，帮助您快速进行Base64编码和解码操作，适用于开发人员、测试人员和任何需要处理Base64数据的用户。</p>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-gray-400">&copy; 2025 Base64工具. 保留所有权利.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition-all-ease">
+                        <i class="fa fa-github text-xl" aria-hidden="true"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-all-ease">
+                        <i class="fa fa-twitter text-xl" aria-hidden="true"></i>
+                    </a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-all-ease">
+                        <i class="fa fa-linkedin text-xl" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 错误提示模态框 -->
+    <div id="errorModal" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 max-w-md w-full mx-4 transition-colors duration-300">
+            <div class="text-center">
+                <div class="w-16 h-16 bg-red-100 text-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fa fa-exclamation-triangle text-2xl" aria-hidden="true"></i>
+                </div>
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">处理错误</h3>
+                    <p id="errorMessage" class="text-secondary dark:text-gray-300 mb-6">操作过程中发生错误，请重试。</p>
+                <button id="closeErrorBtn" class="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg transition-all-ease">
+                    关闭
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
