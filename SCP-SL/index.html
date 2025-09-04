@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCP-SL 快速教程</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../icon.png">
+    <script>
+        // 配置Tailwind自定义颜色和启用深色模式
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#1e40af',
+                        neutral: '#f3f4f6',
+                        dark: {
+                            bg: '#1e293b',
+                            card: '#334155',
+                            text: '#f8fafc',
+                            border: '#475569'
+                        },
+                        scp: {
+                            danger: '#ef4444',
+                            warning: '#f59e0b',
+                            success: '#10b981',
+                            info: '#3b82f6'
+                        }
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .animate-float {
+                animation: float 3s ease-in-out infinite;
+            }
+            @keyframes float {
+                0% { transform: translateY(0px); }
+                50% { transform: translateY(-10px); }
+                100% { transform: translateY(0px); }
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-dark-bg text-gray-800 dark:text-dark-text min-h-screen flex flex-col transition-colors duration-300">
+    <!-- 导航栏 -->
+    <nav class="bg-white dark:bg-dark-card shadow-sm dark:shadow-lg transition-colors duration-300">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-4">
+                <a href="../index.html" class="text-primary hover:text-secondary transition-colors duration-300 font-medium">
+                    <i class="fa fa-arrow-left mr-1"></i>返回主页
+                </a>
+            </div>
+            <div class="text-xl font-bold text-primary">
+                <i class="fa fa-shield mr-2"></i>SCP-SL 快速教程
+            </div>
+            <div class="flex items-center">
+                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-dark-border transition-colors duration-300">
+                    <i class="fa fa-sun-o text-xl"></i>
+                    <i class="fa fa-moon-o hidden text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容 -->
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <!-- 介绍部分 -->
+        <section class="mb-12">
+            <div class="flex justify-center mb-8">
+                <div class="inline-block p-6 bg-primary/10 dark:bg-primary/20 rounded-full mb-4 animate-float">
+                    <i class="fa fa-book text-5xl text-primary"></i>
+                </div>
+            </div>
+            <div class="bg-white dark:bg-dark-card rounded-lg shadow-md dark:shadow-lg p-6 md:p-8 transition-colors duration-300">
+                <h1 class="text-3xl md:text-4xl font-bold mb-4 text-center">SCP-SL 快速教程</h1>
+                <div class="space-y-4">
+                    <p class="text-lg">
+                        <strong class="text-primary">SCP基金会(Special Containment Procedures Foundation)</strong>也可以简写为Secure.Contain.Protect Foundation。首个公认的SCP收容物起源在臭名昭著的4chan论坛，一名用户上传了一个雕像的图片，被人广泛传播。许多人对此进行描述，173这个概念(也可以说是怪物，因为当时SCP基金会并不存在)诞生了。后面人们上传了更多内容完善了这个圈子，但非常小众。有一个人非常看好这个圈子，因此SCP wikidot诞生了。
+                    </p>
+                    <div class="flex flex-wrap gap-4 justify-center mt-6">
+                        <a href="https://scp-wiki-cn.wikidot.com/" target="_blank" class="px-4 py-2 bg-primary hover:bg-secondary text-white rounded-lg shadow transition-colors duration-300 flex items-center gap-2">
+                            <i class="fa fa-external-link"></i>SCP基金会官方Wiki
+                        </a>
+                        <a href="https://scpfoundation.fandom.com/zh/wiki/SCP%E5%9F%BA%E9%87%91%E4%BC%9A%E4%B8%AD%E6%96%87_Wiki" target="_blank" class="px-4 py-2 bg-secondary hover:bg-primary text-white rounded-lg shadow transition-colors duration-300 flex items-center gap-2">
+                            <i class="fa fa-external-link"></i>SCP基金会中文Wiki(Fandom)
+                        </a>
+                    </div>
+                    <p class="text-sm text-gray-500 dark:text-dark-text/70 mt-4">
+                        注意：因为SCP在中国封禁过一段时间，维基网站访问速度会比较慢！若没有特殊用途可以临时访问Fandom版本。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 人物介绍部分 -->
+        <section class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-center">
+                <i class="fa fa-users mr-2 text-primary"></i>人物介绍
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full bg-white dark:bg-dark-card rounded-lg shadow-md dark:shadow-lg transition-colors duration-300">
+                    <thead>
+                        <tr class="bg-gray-100 dark:bg-dark-border/50">
+                            <th class="px-4 py-3 text-left font-semibold">#</th>
+                            <th class="px-4 py-3 text-left font-semibold">人物</th>
+                            <th class="px-4 py-3 text-left font-semibold">需要干什么</th>
+                            <th class="px-4 py-3 text-left font-semibold">胜利条件</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-dark-border/30">
+                        <tr class="hover:bg-gray-50 dark:hover:bg-dark-border/20 transition-colors">
+                            <td class="px-4 py-3 font-medium">1</td>
+                            <td class="px-4 py-3 font-medium text-scp-warning">D级</td>
+                            <td class="px-4 py-3">在收容失效后做出可以打开A或B大门的钥匙卡(Key Card)</td>
+                            <td class="px-4 py-3">1.撤离会导致基金会胜利难定，不会导致C.I的结局 2.一直苟活到最后击杀所有MTF、保安和科学家，导致D级胜利</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-dark-border/20 transition-colors">
+                            <td class="px-4 py-3 font-medium">2</td>
+                            <td class="px-4 py-3 font-medium text-scp-info">保安</td>
+                            <td class="px-4 py-3">击杀D级和SCP(在有规则服务器禁止击杀未造反的D级)并跟MTF合作</td>
+                            <td class="px-4 py-3">协助击杀SCP、C.I和造反D级，获得基金会胜利</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-dark-border/20 transition-colors">
+                            <td class="px-4 py-3 font-medium">3</td>
+                            <td class="px-4 py-3 font-medium text-scp-success">MTF</td>
+                            <td class="px-4 py-3">帮助科学家下班和保安协作击杀SCP和C.I的成员</td>
+                            <td class="px-4 py-3">协助击杀SCP、C.I和造反D级，获得基金会胜利</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-dark-border/20 transition-colors">
+                            <td class="px-4 py-3 font-medium">4</td>
+                            <td class="px-4 py-3 font-medium text-scp-danger">C.I</td>
+                            <td class="px-4 py-3">击杀保安和科学家和SCP，协助D级撤离</td>
+                            <td class="px-4 py-3">击杀SCP、MTF、科学家和保安，获得混沌分裂者胜利</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-dark-border/20 transition-colors">
+                            <td class="px-4 py-3 font-medium">5</td>
+                            <td class="px-4 py-3 font-medium text-scp-warning">SCP</td>
+                            <td class="px-4 py-3">协助队友击杀场地上的所有角色(除了SCP)</td>
+                            <td class="px-4 py-3">击杀所有人获得SCP胜利</td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-dark-border/20 transition-colors">
+                            <td class="px-4 py-3 font-medium">6</td>
+                            <td class="px-4 py-3 font-medium text-scp-info">科学家</td>
+                            <td class="px-4 py-3">跟随保安和MTF去A或者B大门撤离</td>
+                            <td class="px-4 py-3">N/A 跟随基金会人物</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 通关思路部分 -->
+        <section class="mb-12">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-center">
+                <i class="fa fa-lightbulb-o mr-2 text-primary"></i>通关思路
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- D级 -->
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-md dark:shadow-lg p-6 transition-colors duration-300 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-scp-warning/20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fa fa-user-secret text-2xl text-scp-warning"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">D级</h3>
+                    </div>
+                    <p class="text-gray-700 dark:text-dark-text/90">
+                        先到914房刷钥匙卡把齿轮刷到2级，去重收跑到轻收，找到A或B大门(A大门还要跑一段路到B大门入口)。
+                    </p>
+                </div>
+
+                <!-- 保安 -->
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-md dark:shadow-lg p-6 transition-colors duration-300 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-scp-info/20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fa fa-shield text-2xl text-scp-info"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">保安</h3>
+                    </div>
+                    <p class="text-gray-700 dark:text-dark-text/90">
+                        1.(无规则建议)去重收等D级有D级了就打基本能掉卡 2.到B大门(A大门是C.I的出生点)苟直到MTF来在撤离。
+                    </p>
+                </div>
+
+                <!-- MTF -->
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-md dark:shadow-lg p-6 transition-colors duration-300 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-scp-success/20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">MTF</h3>
+                    </div>
+                    <p class="text-gray-700 dark:text-dark-text/90">
+                        单纯的打SCP、D级和C.I，不会打的可以跟着大部队。
+                    </p>
+                </div>
+
+                <!-- C.I -->
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-md dark:shadow-lg p-6 transition-colors duration-300 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-scp-danger/20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fa fa-exclamation-circle" aria-hidden="true" ></i>
+                        </div>
+                        <h3 class="text-xl font-bold">C.I</h3>
+                    </div>
+                    <p class="text-gray-700 dark:text-dark-text/90">
+                        单纯的打SCP、科学家和保安和MTF，不会打的也可以跟着大部队。
+                    </p>
+                </div>
+
+                <!-- SCP -->
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-md dark:shadow-lg p-6 transition-colors duration-300 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-scp-warning/20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fa fa-exclamation-circle" aria-hidden="true" ></i>
+                        </div>
+                        <h3 class="text-xl font-bold">SCP</h3>
+                    </div>
+                    <p class="text-gray-700 dark:text-dark-text/90">
+                        萌新克星，建议到无规则服务器练，打人和策略，人打完了就赢。
+                    </p>
+                </div>
+
+                <!-- 科学家 -->
+                <div class="bg-white dark:bg-dark-card rounded-lg shadow-md dark:shadow-lg p-6 transition-colors duration-300 card-hover">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 bg-scp-info/20 rounded-full flex items-center justify-center mr-4">
+                            <i class="fa fa-flask text-2xl text-scp-info"></i>
+                        </div>
+                        <h3 class="text-xl font-bold">科学家</h3>
+                    </div>
+                    <p class="text-gray-700 dark:text-dark-text/90">
+                        跟随MTF和保安撤离，前期可以跟D级一块走(后期尽量躲D级)。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SCP推荐部分 -->
+        <section class="mb-8">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 text-center">
+                <i class="fa fa-star mr-2 text-primary"></i>SCP推荐
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full bg-white dark:bg-dark-card rounded-lg shadow-md dark:shadow-lg transition-colors duration-300">
+                    <thead>
+                        <tr class="bg-gray-100 dark:bg-dark-border/50">
+                            <th class="px-4 py-3 text-left font-semibold">#</th>
+                            <th class="px-4 py-3 text-left font-semibold">SCP</th>
+                            <th class="px-4 py-3 text-left font-semibold">作用</th>
+                            <th class="px-4 py-3 text-left font-semibold">推荐指数(1-10)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 dark:divide-dark-border/30">
+                        <tr class="hover:bg-gray-50 dark:hover:bg-dark-border/20 transition-colors">
+                            <td class="px-4 py-3 font-medium">1</td>
+                            <td class="px-4 py-3 font-medium text-scp-danger">SCP-049</td>
+                            <td class="px-4 py-3">击杀所有人，尽量创造更多的049-2</td>
+                            <td class="px-4 py-3">
+                                <div class="flex">
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <span class="ml-2 text-sm font-medium">(5)</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-dark-border/20 transition-colors">
+                            <td class="px-4 py-3 font-medium">2</td>
+                            <td class="px-4 py-3 font-medium text-scp-warning">SCP-049-2</td>
+                            <td class="px-4 py-3">帮其他SCP挡子弹，吸引火力，自刎会对049造成不好的影响</td>
+                            <td class="px-4 py-3">
+                                <div class="flex">
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <span class="ml-2 text-sm font-medium">(3)</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-dark-border/20 transition-colors">
+                            <td class="px-4 py-3 font-medium">3</td>
+                            <td class="px-4 py-3 font-medium text-scp-info">SCP-079</td>
+                            <td class="px-4 py-3">帮助其他SCP，在必要时标点，在SCP处于必胜局(比如跟没有枪的D级在同一个房间)可以按G锁住所有门。<strong class="text-scp-danger">容易被队友压力!</strong></td>
+                            <td class="px-4 py-3">
+                                <div class="flex">
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <span class="ml-2 text-sm font-medium">(2)</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-dark-border/20 transition-colors">
+                            <td class="px-4 py-3 font-medium">4</td>
+                            <td class="px-4 py-3 font-medium text-scp-warning">SCP-106</td>
+                            <td class="px-4 py-3">顶级SCP，唯一的缺点就是不能疾跑，穿门+无视护甲可以两下进口袋</td>
+                            <td class="px-4 py-3">
+                                <div class="flex">
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <span class="ml-2 text-sm font-medium">(8)</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-dark-border/20 transition-colors">
+                            <td class="px-4 py-3 font-medium">5</td>
+                            <td class="px-4 py-3 font-medium text-scp-danger">SCP-173</td>
+                            <td class="px-4 py-3">在被盯着时无法移动，右键攻击，瞄准不好勿选</td>
+                            <td class="px-4 py-3">
+                                <div class="flex">
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <span class="ml-2 text-sm font-medium">(7)</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-dark-border/20 transition-colors">
+                            <td class="px-4 py-3 font-medium">6</td>
+                            <td class="px-4 py-3 font-medium text-scp-warning">SCP-939</td>
+                            <td class="px-4 py-3">没有视力靠听觉，伤害很高重甲基本3下就死</td>
+                            <td class="px-4 py-3">
+                                <div class="flex">
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <span class="ml-2 text-sm font-medium">(9)</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-dark-border/20 transition-colors">
+                            <td class="px-4 py-3 font-medium">7</td>
+                            <td class="px-4 py-3 font-medium text-scp-danger">SCP-096</td>
+                            <td class="px-4 py-3">无敌SCP除了围攻和电炮基本没法，一个人单杀，但还是吃瞄准</td>
+                            <td class="px-4 py-3">
+                                <div class="flex">
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <span class="ml-2 text-sm font-medium">(9)</span>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-gray-50 dark:hover:bg-dark-border/20 transition-colors">
+                            <td class="px-4 py-3 font-medium">8</td>
+                            <td class="px-4 py-3 font-medium text-scp-info">SCP-1344</td>
+                            <td class="px-4 py-3">建议和队友行动，在发动技能的时候容易被打扰，可以当人类卧底</td>
+                            <td class="px-4 py-3">
+                                <div class="flex">
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-yellow-400"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <i class="fa fa-star text-gray-300 dark:text-gray-600"></i>
+                                    <span class="ml-2 text-sm font-medium">(7)</span>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-gray-800 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <p class="text-gray-400">&copy;,保留所有权利</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="https://github.com/dsascx" class="p-2 bg-light-accent/10 dark:bg-dark-accent/20 hover:bg-light-accent/20 dark:hover:bg-dark-accent/30 rounded-full text-light-accent dark:text-dark-accent transition-all duration-300" target="_blank" rel="noopener noreferrer">
+                    <i class="fa fa-github text-xl"></i>
+                </a>
+                <a href="https://www.youtube.com/@dsascx" class="p-2 bg-light-accent/10 dark:bg-dark-accent/20 hover:bg-light-accent/20 dark:hover:bg-dark-accent/30 rounded-full text-light-accent dark:text-dark-accent transition-all duration-300" target="_blank" rel="noopener noreferrer">
+                    <i class="fa fa-youtube-play text-xl"></i>
+                </a>
+                <a href="https://www.douyin.com/user/MS4wLjABAAAAfiIu6pxKpT0VzoIVm2jNbcMOWCNSmaG34yM6t3izATrZl59KfgDQQEoWD-IPaLLT?enter_from=general_search&enter_method=general_search&extra_params=%7B%22search_params%22%3A%7B%22search_result_id%22%3A%221838033970671416%22%2C%22relation_tag%22%3A0%2C%22log_pb%22%3A%7B%22impr_id%22%3A%22202508151517271565A37BD974FCF11BF5%22%7D%2C%22search_type%22%3A%22general%22%2C%22impr_id%22%3A%22202508151517271565A37BD974FCF11BF5%22%2C%22search_id%22%3A%22202508151517271565A37BD974FCF11BF5%22%2C%22search_keyword%22%3A%22buildffa_hack%22%2C%22token_type%22%3A%22discover_list%22%7D%7D&from_tab_name=main" class="p-2 bg-light-accent/10 dark:bg-dark-accent/20 hover:bg-light-accent/20 dark:hover:bg-dark-accent/30 rounded-full text-light-accent dark:text-dark-accent transition-all duration-300" target="_blank" rel="noopener noreferrer">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 640" class="w-6 h-6 fill-current"><!--!Font Awesome Free 7.0.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2025 Fonticons, Inc.--><path d="M544.5 273.9C500.5 274 457.5 260.3 421.7 234.7L421.7 413.4C421.7 446.5 411.6 478.8 392.7 506C373.8 533.2 347.1 554 316.1 565.6C285.1 577.2 251.3 579.1 219.2 570.9C187.1 562.7 158.3 545 136.5 520.1C114.7 495.2 101.2 464.1 97.5 431.2C93.8 398.3 100.4 365.1 116.1 336C131.8 306.9 156.1 283.3 185.7 268.3C215.3 253.3 248.6 247.8 281.4 252.3L281.4 342.2C266.4 337.5 250.3 337.6 235.4 342.6C220.5 347.6 207.5 357.2 198.4 369.9C189.3 382.6 184.4 398 184.5 413.8C184.6 429.6 189.7 444.8 199 457.5C208.3 470.2 221.4 479.6 236.4 484.4C251.4 489.2 267.5 489.2 282.4 484.3C297.3 479.4 310.4 469.9 319.6 457.2C328.8 444.5 333.8 429.1 333.8 413.4L333.8 64L421.8 64C421.7 71.4 422.4 78.9 423.7 86.2C426.8 102.5 433.1 118.1 442.4 131.9C451.7 145.7 463.7 157.5 477.6 166.5C497.5 179.6 520.8 186.6 544.6 186.6L544.6 274z"/></svg>
+                </a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // 主题切换功能
+        const themeToggle = document.getElementById('theme-toggle');
+        const savedTheme = localStorage.getItem('theme');
+
+        // 初始化主题
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            themeToggle.querySelector('.fa-sun-o').classList.add('hidden');
+            themeToggle.querySelector('.fa-moon-o').classList.remove('hidden');
+        }
+
+        // 主题切换事件
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            
+            // 切换图标
+            themeToggle.querySelector('.fa-sun-o').classList.toggle('hidden');
+            themeToggle.querySelector('.fa-moon-o').classList.toggle('hidden');
+        });
+
+        // 平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
